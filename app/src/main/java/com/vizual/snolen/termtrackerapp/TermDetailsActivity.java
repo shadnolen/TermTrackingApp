@@ -100,19 +100,19 @@ public class TermDetailsActivity extends AppCompatActivity {
 
         for (List<String> list : coursesList){
             final TableRow row = new TableRow(TermDetailsActivity.this);
-            TextView idCol = new TextView(TermDetailsActivity.this);
-            TextView nameCol = new TextView(TermDetailsActivity.this);
+            TextView columnID = new TextView(TermDetailsActivity.this);
+            TextView columnName = new TextView(TermDetailsActivity.this);
             Button removeCourseBtn = new Button(TermDetailsActivity.this);
 
             // Fill
-            idCol.setText(list.get(0));
-            idCol.setMinWidth(120);
-            final String idNum = idCol.getText().toString();
-            nameCol.setText(list.get(1));
-            nameCol.setPadding(0,0, 5, 0);
-            nameCol.setMaxEms(17);
-            nameCol.setSingleLine();
-            nameCol.setEllipsize(TextUtils.TruncateAt.END);
+            columnID.setText(list.get(0));
+            columnID.setMinWidth(120);
+            final String idNum = columnID.getText().toString();
+            columnName.setText(list.get(1));
+            columnName.setPadding(0,0, 5, 0);
+            columnName.setMaxEms(17);
+            columnName.setSingleLine();
+            columnName.setEllipsize(TextUtils.TruncateAt.END);
 
             // Delete Button
             removeCourseBtn.setText("Delete");
@@ -125,8 +125,8 @@ public class TermDetailsActivity extends AppCompatActivity {
                 }
             });
 
-            row.addView(idCol);
-            row.addView(nameCol);
+            row.addView(columnID);
+            row.addView(columnName);
             row.addView(removeCourseBtn);
             innerCoursesTable.addView(row);
         }

@@ -133,20 +133,20 @@ public class CoursesActivity extends AppCompatActivity {
             for (List<String> list : allCourses) {
 
                 TableRow row = new TableRow(CoursesActivity.this);
-                TextView idCol = new TextView(CoursesActivity.this);
-                TextView nameCol = new TextView(CoursesActivity.this);
+                TextView columnID = new TextView(CoursesActivity.this);
+                TextView columnName = new TextView(CoursesActivity.this);
                 TextView statusCol = new TextView(CoursesActivity.this);
                 Button detailBtn = new Button(CoursesActivity.this);
 
-                idCol.setText(list.get(0));
-                idCol.setMinWidth(120);
-                final String idNum = idCol.getText().toString();
-                nameCol.setText(list.get(1));
-                nameCol.setMinWidth(250);
-                nameCol.setMaxEms(10);
-                nameCol.setEllipsize(TextUtils.TruncateAt.END);
-                nameCol.setHorizontallyScrolling(false);
-                nameCol.setSingleLine();
+                columnID.setText(list.get(0));
+                columnID.setMinWidth(120);
+                final String idNum = columnID.getText().toString();
+                columnName.setText(list.get(1));
+                columnName.setMinWidth(250);
+                columnName.setMaxEms(10);
+                columnName.setEllipsize(TextUtils.TruncateAt.END);
+                columnName.setHorizontallyScrolling(false);
+                columnName.setSingleLine();
                 statusCol.setText(list.get(2));
                 statusCol.setMinWidth(250);
 
@@ -164,8 +164,8 @@ public class CoursesActivity extends AppCompatActivity {
                     }
                 });
 
-                row.addView(idCol);
-                row.addView(nameCol);
+                row.addView(columnID);
+                row.addView(columnName);
                 row.addView(statusCol);
                 row.addView(detailBtn);
                 courseTable.addView(row);

@@ -33,12 +33,15 @@ public class AssessmentDetailActivity extends AppCompatActivity {
     // We Need Some Variables Right?
     DatabaseSQLite database;
     Calendar calendar = Calendar.getInstance();
+
     ScrollView addAssessEnterView;
     Button assessSaveButton, assessCancelButton;
     EditText addAssessHead, addAssessID, addAssessDescrip;
     TextView addDueDate;
+
     Spinner addSpinnerCourse, addSpinnerStatus, addSpinnerType;
     String assessmentID = null;
+
     SharedPreferences sharedPrefer;
     SharedPreferences.Editor editor;
 
@@ -49,6 +52,7 @@ public class AssessmentDetailActivity extends AppCompatActivity {
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, month);
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
             updateLabel(calendar);
             calendar = Calendar.getInstance();
         }
@@ -68,10 +72,12 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         addAssessEnterView = (ScrollView) findViewById(R.id.addAssessEnterView);
         assessSaveButton = (Button) findViewById(R.id.assessSaveButton);
         assessCancelButton = (Button) findViewById(R.id.assessCancelButton);
+
         addAssessHead = (EditText) findViewById(R.id.addAssessHead);
         addAssessID = (EditText) findViewById(R.id.addAssessID);
         addAssessDescrip = (EditText) findViewById(R.id.addAssessDescrip);
         addDueDate = (TextView) findViewById (R.id.addDueDate);
+
         addSpinnerType = (Spinner) findViewById(R.id.addSpinnerType);
         addSpinnerStatus = (Spinner) findViewById(R.id.addSpinnerStatus);
         addSpinnerCourse = (Spinner) findViewById(R.id.addSpinnerCourse);
@@ -87,7 +93,8 @@ public class AssessmentDetailActivity extends AppCompatActivity {
 
     // onClick Date View
     public void dateSelect_ADD(View v){
-        DatePickerDialog datepicker = new DatePickerDialog(AssessmentDetailActivity.this, datePick, calendar.get(Calendar.YEAR),
+        DatePickerDialog datepicker = new DatePickerDialog(AssessmentDetailActivity.this, datePick,
+                calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 
         List<Long> courseDates = database.getCourseDates(addSpinnerCourse.getSelectedItem().toString());
@@ -107,12 +114,14 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         addSpinnerCourse.setAdapter(courseAdapter_ADD);
 
         // Spinner type:
-        ArrayAdapter<CharSequence> typeAdapter_ADD = ArrayAdapter.createFromResource(this, R.array.assessment_type, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> typeAdapter_ADD = ArrayAdapter.createFromResource(this, R.array.assessment_type,
+                android.R.layout.simple_spinner_item);
         typeAdapter_ADD.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         addSpinnerType.setAdapter(typeAdapter_ADD);
 
         // status:
-        ArrayAdapter<CharSequence> statusAdapter_ADD = ArrayAdapter.createFromResource(this, R.array.assessment_status, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> statusAdapter_ADD = ArrayAdapter.createFromResource(this, R.array.assessment_status,
+                android.R.layout.simple_spinner_item);
         statusAdapter_ADD.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         addSpinnerStatus.setAdapter(statusAdapter_ADD);
 
@@ -150,15 +159,18 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         String name = addAssessHead.getText().toString();
         String code = addAssessID.getText().toString();
         String description = addAssessDescrip.getText().toString();
+
         String course = addSpinnerCourse.getSelectedItem().toString();
         String type = addSpinnerType.getSelectedItem().toString();
         String status = addSpinnerStatus.getSelectedItem().toString();
+
         String dueDateString = addDueDate.getText().toString();
         long dateNum = 1;
 
         // Name Blank?
         if (name.isEmpty()){
-            Toast.makeText(AssessmentDetailActivity.this, "Enter name.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AssessmentDetailActivity.this, "Enter name.",
+                    Toast.LENGTH_SHORT).show();
             dataInvalid = true;
         }
 
@@ -166,7 +178,8 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         if (!dataInvalid){
             if (code.isEmpty()) {
                 dataInvalid = true;
-                Toast.makeText(AssessmentDetailActivity.this, "Enter code.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AssessmentDetailActivity.this, "Enter code.",
+                        Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -174,7 +187,8 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         if (!dataInvalid){
             if (dueDateString.isEmpty()){
                 dataInvalid = true;
-                Toast.makeText(AssessmentDetailActivity.this, "Select date.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AssessmentDetailActivity.this, "Select date.",
+                        Toast.LENGTH_SHORT).show();
             } else {
                 try {
                     SimpleDateFormat simpleDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
@@ -182,7 +196,8 @@ public class AssessmentDetailActivity extends AppCompatActivity {
                     dateNum = date.getTime();
                 } catch (ParseException e){
                     dataInvalid = true;
-                    Toast.makeText(AssessmentDetailActivity.this, "There was a problem with your dates.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AssessmentDetailActivity.this, "There was a problem with your dates.",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -195,12 +210,14 @@ public class AssessmentDetailActivity extends AppCompatActivity {
 
             if(!datesvalid){
                 dataInvalid = true;
-                Toast.makeText(AssessmentDetailActivity.this, "Due date outside of course dates.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AssessmentDetailActivity.this, "Due date outside of course dates.",
+                        Toast.LENGTH_SHORT).show();
             } else {
                 datesvalid = (dateNum <= courseDates.get(1));
                 if (!datesvalid){
                     dataInvalid = true;
-                    Toast.makeText(AssessmentDetailActivity.this, "Due date outside of course dates.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AssessmentDetailActivity.this, "Due date outside of course dates.",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -215,13 +232,15 @@ public class AssessmentDetailActivity extends AppCompatActivity {
             boolean isUpdated = database.updateAssessment(assessmentID, name, code, description, course_id, type, status, dateNum);
 
             if (isUpdated){
-                Toast.makeText(AssessmentDetailActivity.this, "Assessment updated.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AssessmentDetailActivity.this, "Assessment updated.",
+                        Toast.LENGTH_SHORT).show();
 
                 // Update when Updated
                 finish();
 
             } else {
-                Toast.makeText(AssessmentDetailActivity.this, "Assessment not updated.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AssessmentDetailActivity.this, "Assessment not updated.",
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -246,22 +265,25 @@ public class AssessmentDetailActivity extends AppCompatActivity {
 
         // Convert Date to Long
         if (!dateDUE.isEmpty()){
-            SimpleDateFormat simpleDate = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+            SimpleDateFormat simpleDate = new SimpleDateFormat("MM/dd/yyyy",
+                    Locale.getDefault());
             try {
                 Date date = simpleDate.parse(dateDUE);
                 long dateNum = date.getTime();
 
                 Intent alertIntent = new Intent(this, AlarmNotifi.class);
                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                alarmManager.set(AlarmManager.RTC_WAKEUP, dateNum, PendingIntent.getBroadcast(this, 1, alertIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT));
+                alarmManager.set(AlarmManager.RTC_WAKEUP, dateNum, PendingIntent.getBroadcast(this, 1,
+                        alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
-                Toast.makeText(AssessmentDetailActivity.this, "Alert set.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AssessmentDetailActivity.this, "Alert set.",
+                        Toast.LENGTH_SHORT).show();
             } catch (ParseException e) {
 
             }
         } else {
-            Toast.makeText(AssessmentDetailActivity.this, "Dates cannot be blank.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AssessmentDetailActivity.this, "Dates cannot be blank.",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -109,8 +109,8 @@ public class TermsActivity extends AppCompatActivity {
         for (List<String> list : allTerms){
 
             TableRow row = new TableRow(TermsActivity.this);
-            TextView idCol = new TextView(TermsActivity.this);
-            TextView nameCol = new TextView(TermsActivity.this);
+            TextView columnID = new TextView(TermsActivity.this);
+            TextView columnName = new TextView(TermsActivity.this);
             TextView startCol = new TextView(TermsActivity.this);
             TextView spaceCol = new TextView(TermsActivity.this);
             TextView endCol = new TextView(TermsActivity.this);
@@ -120,11 +120,11 @@ public class TermsActivity extends AppCompatActivity {
             long start = Long.valueOf(list.get(2));
             long end = Long.valueOf(list.get(3));
 
-            idCol.setText(list.get(0));
-            idCol.setMinWidth(120);
-            final String idNum = idCol.getText().toString();
-            nameCol.setText(list.get(1));
-            nameCol.setMinWidth(250);
+            columnID.setText(list.get(0));
+            columnID.setMinWidth(120);
+            final String idNum = columnID.getText().toString();
+            columnName.setText(list.get(1));
+            columnName.setMinWidth(250);
             startCol.setText(new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(new Date(start)));
             startCol.setMinWidth(250);
             spaceCol.setMinWidth(45);
@@ -147,8 +147,8 @@ public class TermsActivity extends AppCompatActivity {
                 }
             });
 
-            row.addView(idCol);
-            row.addView(nameCol);
+            row.addView(columnID);
+            row.addView(columnName);
             row.addView(startCol);
             row.addView(spaceCol);
             row.addView(endCol);

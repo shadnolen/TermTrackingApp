@@ -43,16 +43,23 @@ public class CourseDetailActivity extends AppCompatActivity {
 
     DatabaseSQLite database;
     Calendar calendar = Calendar.getInstance();
-    EditText courseName, courseDescription, courseMentorName, courseMentorPhone, courseMentorMail;
+
+    EditText courseName, courseDescription, courseMentorName,
+            courseMentorPhone, courseMentorMail;
     TextView courseStart, courseEnd;
+
     TableLayout assessmentsTable_CD, courseNotesTable;
     int dateFieldToggle;
+
     Spinner termSpinner, statusSpinner;
     ScrollView courseDetailView;
+
     String courseID = null;
     Button newNoteButton_CD;
+
     SharedPreferences sharedPrefer;
     SharedPreferences.Editor editor;
+    
     Boolean startDateChanged = false;
     Boolean endDateChanged = false;
 
@@ -459,7 +466,7 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         for (List<String> list : assessmentList){
             TableRow row = new TableRow(CourseDetailActivity.this);
-            TextView nameCol = new TextView(CourseDetailActivity.this);
+            TextView columnName = new TextView(CourseDetailActivity.this);
             TextView typeCol = new TextView(CourseDetailActivity.this);
             TextView dateCol = new TextView(CourseDetailActivity.this);
 
@@ -467,8 +474,8 @@ public class CourseDetailActivity extends AppCompatActivity {
             assessmentDetails_CD.setText("DETAILS");
             assessmentDetails_CD.setPadding(1, 0, 0, 0);
 
-            nameCol.setText(list.get(0));
-            final String assessName = nameCol.getText().toString();
+            columnName.setText(list.get(0));
+            final String assessName = columnName.getText().toString();
             typeCol.setText(" " + list.get(1));
             dateCol.setText(" " + list.get(2));
 
@@ -485,7 +492,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                     v.getContext().startActivity(intent);
                 }
             });
-            row.addView(nameCol);
+            row.addView(columnName);
             row.addView(typeCol);
             row.addView(dateCol);
             row.addView(assessmentDetails_CD);
