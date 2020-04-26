@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Term Tracker</string>
+    <string name="title_activity_terms">Term Activity</string>
+    <string name="title_activity_courses">Course Activity</string>
+    <string name="title_activity_term_details">Term Detail Activity</string>
+    <string name="title_activity_course_detail">Course Detail Activity</string>
+    <string name="title_activity_assessment_detail">Assessment Detail Activity</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>    <string-array name="assessment_status">
+    <item>Not Attempted</item>
+    <item>Second Attempt</item>
+    <item>Third Attempt</item>
+    <item>Passed</item>
+</string-array></resources>

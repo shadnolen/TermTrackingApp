@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".TermDetailsActivity"
+    tools:showIn="@layout/activity_term_details">
+
+    <ScrollView
+        android:id="@+id/termDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+
+        >
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+
+            android:gravity="center">
+
+            <!--Row 1-->
+            <TableRow>
+
+                <TextView
+
+                    android:id="@+id/termDetailHeader"
+                    android:text="Term Name"
+                    android:textSize="40sp" />
+            </TableRow>
+
+            <!--Row 2-->
+            <TableRow>
+
+                <TextView android:text="Start date "
+                    android:textSize="20sp"/>
+
+                <TextView android:id="@+id/termDetailStart"
+                   />
+
+            </TableRow>
+
+            <!--Row 3-->
+            <TableRow>
+
+                <TextView android:text="End date " />
+
+                <TextView android:id="@+id/termDetailEnd" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_height="34dp"
+                android:paddingTop="5dp">
+
+                <TextView android:text="COURSES" />
+            </TableRow>
+
+            <TableLayout
+                android:id="@+id/innerCoursesTable"
+                android:background="@color/colorTableBackground">
+
+            </TableLayout>
+
+            <Button
+                android:id="@+id/deleteTermDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="deleteTerm"
+                android:text="DELETE TERM" />
+        </TableLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>
