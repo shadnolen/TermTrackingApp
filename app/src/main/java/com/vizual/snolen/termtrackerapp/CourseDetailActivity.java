@@ -41,6 +41,7 @@ import java.util.Locale;
 
 public class CourseDetailActivity extends AppCompatActivity {
 
+    // Variable a day keeps the errors away...
     DatabaseSQLite database;
     Calendar calendar = Calendar.getInstance();
 
@@ -59,7 +60,7 @@ public class CourseDetailActivity extends AppCompatActivity {
 
     SharedPreferences sharedPrefer;
     SharedPreferences.Editor editor;
-    
+
     Boolean startDateChanged = false;
     Boolean endDateChanged = false;
 
@@ -91,19 +92,24 @@ public class CourseDetailActivity extends AppCompatActivity {
         courseDetailView = (ScrollView) findViewById(R.id.courseDetailView);
         courseName = (EditText) findViewById(R.id.courseName_CD);
         termSpinner = (Spinner) findViewById(R.id.termSpinner_CD);
+
         courseDescription = (EditText) findViewById(R.id.courseDescription_CD);
         courseStart = (TextView) findViewById(R.id.editStart_CD);
         courseEnd = (TextView) findViewById(R.id.editEnd_CD);
         statusSpinner = (Spinner) findViewById(R.id.statusSpinner_CD);
+
         courseMentorName = (EditText) findViewById(R.id.editMentorName_CD);
         courseMentorPhone = (EditText) findViewById(R.id.editMentorPhone_CD);
         courseMentorMail = (EditText) findViewById(R.id.editMentorEmail_CD);
+
         courseNotesTable = (TableLayout) findViewById(R.id.notesTable_CD);
         assessmentsTable_CD = (TableLayout) findViewById(R.id.assessmentsTable_CD);
+
         newNoteButton_CD = (Button) findViewById(R.id.newNoteButton_CD);
 
         // Spinner status:
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.course_status, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.course_status,
+                android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         statusSpinner.setAdapter(adapter);
 
@@ -125,17 +131,21 @@ public class CourseDetailActivity extends AppCompatActivity {
         // Date Listener
         courseStart.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
             @Override
             public void afterTextChanged(Editable s) { startDateChanged = true; }
         });
         courseEnd.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
             @Override
             public void afterTextChanged(Editable s) { endDateChanged = true; }
         });
@@ -157,6 +167,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         cursor.moveToFirst();
         courseName.setText(cursor.getString(1));
         courseDescription.setText(cursor.getString(3));
+
         courseMentorName.setText(cursor.getString(6));
         courseMentorPhone.setText(cursor.getString(7));
         courseMentorMail.setText(cursor.getString(8));
@@ -176,8 +187,10 @@ public class CourseDetailActivity extends AppCompatActivity {
         // Fill dates:
         long startNum = cursor.getLong(4);
         long endNum = cursor.getLong(5);
+
         String start = simpledate.format(startNum);
         String end = simpledate.format(endNum);
+
         courseStart.setText(start);
         courseEnd.setText(end);
 
@@ -201,12 +214,15 @@ public class CourseDetailActivity extends AppCompatActivity {
     // Save Button
     public void saveButton_CD(View v){
         boolean dataInvalid = false;
+
         String name = courseName.getText().toString();
         String description = courseDescription.getText().toString();
         String start = courseStart.getText().toString();
         String end = courseEnd.getText().toString();
+
         long numStart = 1;
         long numEnd = 1;
+
         String status = statusSpinner.getSelectedItem().toString();
         String term = termSpinner.getSelectedItem().toString();
         String menName = courseMentorName.getText().toString();
@@ -217,7 +233,8 @@ public class CourseDetailActivity extends AppCompatActivity {
         //Got Validation?
         // blank:
         if (name.isEmpty()){
-            Toast.makeText(CourseDetailActivity.this, "Enter name.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CourseDetailActivity.this, "Enter name.",
+                    Toast.LENGTH_SHORT).show();
             dataInvalid = true;
         }
 
@@ -229,7 +246,8 @@ public class CourseDetailActivity extends AppCompatActivity {
                 int idFromDatabase = database.getCourseID(name);
                 if (Integer.parseInt(courseID) != idFromDatabase) {
                     dataInvalid = true;
-                    Toast.makeText(CourseDetailActivity.this, "Already in rolled in Course.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CourseDetailActivity.this, "Already in rolled in Course.",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -240,7 +258,8 @@ public class CourseDetailActivity extends AppCompatActivity {
             // Empty Dates?
             if (start.isEmpty() || end.isEmpty()) {
                 dataInvalid = true;
-                Toast.makeText(CourseDetailActivity.this, "Dates can't be blank.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CourseDetailActivity.this, "Dates can't be blank.",
+                        Toast.LENGTH_SHORT).show();
             } else {
                 try {
                     SimpleDateFormat simpledate = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
@@ -250,7 +269,8 @@ public class CourseDetailActivity extends AppCompatActivity {
                     numEnd = date.getTime();
                 } catch (ParseException e) {
                     dataInvalid = true;
-                    Toast.makeText(CourseDetailActivity.this, "There was a problem, check your dates.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CourseDetailActivity.this, "There was a problem, check your dates.",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -259,7 +279,8 @@ public class CourseDetailActivity extends AppCompatActivity {
         if (!dataInvalid){
             boolean datesvalid = (numEnd > numStart);
             if (!datesvalid){
-                Toast.makeText(CourseDetailActivity.this, "End date must be after start date.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CourseDetailActivity.this, "End date must be after start date.",
+                        Toast.LENGTH_SHORT).show();
                 dataInvalid = true;
             }
         }
@@ -270,12 +291,14 @@ public class CourseDetailActivity extends AppCompatActivity {
             boolean datesvalid = (numStart >= termDates.get(0));
 
             if (!datesvalid){
-                Toast.makeText(CourseDetailActivity.this, "Start date outside of term.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CourseDetailActivity.this, "Start date outside of term.",
+                        Toast.LENGTH_SHORT).show();
                 dataInvalid = true;
             } else {
                 datesvalid = (numEnd <= termDates.get(1));
                 if (!datesvalid){
-                    Toast.makeText(CourseDetailActivity.this, "End date outside of term.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CourseDetailActivity.this, "End date outside of term.",
+                            Toast.LENGTH_SHORT).show();
                     dataInvalid = true;
                 }
             }
@@ -287,7 +310,8 @@ public class CourseDetailActivity extends AppCompatActivity {
             if (!startDateChanged || !endDateChanged) {
                 boolean overlap = database.dateCompares("courses", numStart, numEnd);
                 if (overlap) {
-                    Toast.makeText(CourseDetailActivity.this, "Course dates overlap with another course.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CourseDetailActivity.this, "Course dates overlap with another course.",
+                            Toast.LENGTH_SHORT).show();
                     dataInvalid = true;
                 }
             }
@@ -300,10 +324,12 @@ public class CourseDetailActivity extends AppCompatActivity {
                     status, menName, menPhone, menMail);
 
             if (isUpdated){
-                Toast.makeText(CourseDetailActivity.this, "Course updated.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CourseDetailActivity.this, "Course updated.",
+                        Toast.LENGTH_SHORT).show();
                 finish();
             } else {
-                Toast.makeText(CourseDetailActivity.this, "Course not updated.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CourseDetailActivity.this, "Course not updated.",
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -330,10 +356,12 @@ public class CourseDetailActivity extends AppCompatActivity {
                 String noteText = noteInput.getText().toString();
                 boolean isInserted = database.insertCourseNote(courseID, noteText);
                 if (isInserted) {
-                    Toast.makeText(CourseDetailActivity.this, "Note added.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CourseDetailActivity.this, "Note added.",
+                            Toast.LENGTH_SHORT).show();
                     fillInCourse(courseID);
                 } else {
-                    Toast.makeText(CourseDetailActivity.this, "Note not added.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CourseDetailActivity.this, "Note not added.",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -439,6 +467,7 @@ public class CourseDetailActivity extends AppCompatActivity {
 
             row.addView(timestampCol);
             row.addView(noteCol);
+
             courseNotesTable.addView(row);
             courseNotesTable.addView(row2);
         }
@@ -453,6 +482,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         ArrayList<List> assessmentList = new ArrayList<>();
 
         while(cursor.moveToNext()){
+
             String name = cursor.getString(3);
             String type = cursor.getString(5);
             String dateDUE = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(new Date(cursor.getLong(6)));
@@ -466,6 +496,7 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         for (List<String> list : assessmentList){
             TableRow row = new TableRow(CourseDetailActivity.this);
+
             TextView columnName = new TextView(CourseDetailActivity.this);
             TextView typeCol = new TextView(CourseDetailActivity.this);
             TextView dateCol = new TextView(CourseDetailActivity.this);
@@ -502,7 +533,8 @@ public class CourseDetailActivity extends AppCompatActivity {
 
     // Date Views
     public void startDateSelect_CD(View v){
-            DatePickerDialog datepicker = new DatePickerDialog(CourseDetailActivity.this, datePick, calendar.get(Calendar.YEAR),
+            DatePickerDialog datepicker = new DatePickerDialog(CourseDetailActivity.this, datePick,
+                    calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 
             List<Long> termDates = database.getTermDates(termSpinner.getSelectedItem().toString());
@@ -513,7 +545,8 @@ public class CourseDetailActivity extends AppCompatActivity {
             datepicker.show();
     }
     public void endDateSelect_CD(View v){
-        DatePickerDialog datepicker = new DatePickerDialog(CourseDetailActivity.this, datePick, calendar.get(Calendar.YEAR),
+        DatePickerDialog datepicker = new DatePickerDialog(CourseDetailActivity.this, datePick,
+                calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 
         List<Long> termDates = database.getTermDates(termSpinner.getSelectedItem().toString());
@@ -553,17 +586,20 @@ public class CourseDetailActivity extends AppCompatActivity {
                 AlarmManager alarmManagerStart = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 AlarmManager alarmManagerEnd = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-                alarmManagerStart.set(AlarmManager.RTC_WAKEUP, startNum, PendingIntent.getBroadcast(this, 1, alertIntent,
+                alarmManagerStart.set(AlarmManager.RTC_WAKEUP, startNum, PendingIntent.getBroadcast(this, 1,
+                        alertIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT));
                 alarmManagerEnd.set(AlarmManager.RTC_WAKEUP, endNum, PendingIntent.getBroadcast(this, 1, alertIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT));
 
-                Toast.makeText(CourseDetailActivity.this, "Alert set.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CourseDetailActivity.this, "Alert set.",
+                        Toast.LENGTH_SHORT).show();
             } catch (ParseException e) {
 
             }
         } else {
-            Toast.makeText(CourseDetailActivity.this, "Dates cannot be blank.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CourseDetailActivity.this, "Dates cannot be blank.",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 

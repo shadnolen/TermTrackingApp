@@ -34,27 +34,32 @@ import java.util.Locale;
 
 public class CoursesActivity extends AppCompatActivity {
 
-    //variables
+    // Did you eat your Variables today?
     DatabaseSQLite database;
+
     Button addCourse, saveCourse, cancelCourse;
     Calendar calendar = Calendar.getInstance();
     TableLayout courseTable;
     int dateFieldToggle;
-    EditText enterName, enterDescription, mentorName, mentorPhone, mentorMail;
+
+    EditText enterName, enterDescription, mentorName,
+            mentorPhone, mentorMail;
     TextView editStart, editEnd;
+
     ScrollView listView, entryView;
     Spinner termSpinner, statusSpinner;
+
     SharedPreferences sharedPrefer;
     SharedPreferences.Editor editor;
 
-    //method to refresh table on resume
+    // Table Refresh onResume
     @Override
     public void onResume(){
         super.onResume();
         populateCourses();
     }
 
-    //to generate DatePicker in date fields
+    // Date Picker
     DatePickerDialog.OnDateSetListener datePick = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -74,10 +79,10 @@ public class CoursesActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Courses");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //get database
+        // Database Connection
         database = new DatabaseSQLite(this);
 
-        //casting
+        //castingon
         courseTable = (TableLayout) findViewById(R.id.courseTable);
         listView = (ScrollView) findViewById(R.id.courseListTable);
         entryView = (ScrollView) findViewById(R.id.courseEntryView);

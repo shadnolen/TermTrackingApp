@@ -36,6 +36,7 @@ public class AssessmentsActivity extends AppCompatActivity {
     // Did you eat your Variables today?
     DatabaseSQLite database;
     Calendar calendar = Calendar.getInstance();
+
     TableLayout assessListTable;
     ScrollView assessListView, assessEnterView;
 
