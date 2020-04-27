@@ -63,11 +63,11 @@
 
                 <EditText
                     android:id="@+id/assesDescrip"
+                    style="@style/Widget.AppCompat.AutoCompleteTextView"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:hint="Description"
-                    android:inputType="textMultiLine"
-                    />
+                    android:inputType="textMultiLine" />
 
             </TableRow>
 

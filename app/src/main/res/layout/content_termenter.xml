@@ -11,28 +11,26 @@
     tools:showIn="@layout/activity_terms">
 
 
-
-
     <ScrollView
         android:id="@+id/termEntry"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="487dp"
         android:layout_gravity="center"
-        android:visibility="gone"
-        android:background="@drawable/vhlogoterm">
-
+        android:background="@drawable/vhlogoterm"
+        android:visibility="visible">
 
 
         <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
+            android:layout_marginLeft="80dp"
             android:layout_marginTop="340dp"
-            android:layout_marginLeft="80dp">
+            android:gravity="center_vertical">
 
 
             <!--Row 1-->
-            <TableRow>
+            <TableRow android:layout_width="match_parent">
+
                 <EditText
                     android:id="@+id/termHeader"
                     android:textSize="20sp" />
@@ -46,6 +44,7 @@
 
                 <TextView
                     android:id="@+id/termStart"
+                    android:layout_height="match_parent"
                     android:layout_marginRight="@dimen/fab_margin"
                     android:hint="Click to add Start date" />
             </TableRow>

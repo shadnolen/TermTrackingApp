@@ -56,7 +56,7 @@ public class TermDetailsActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPrefer.edit();
         termID = sharedPrefer.getString("term", "");
 
-        //Populate is the rumour is true
+        //Populate if the rumour is true(add term info)
         fillInTerm(termID);
         populateCourseTable(termID);
 
@@ -142,14 +142,16 @@ public class TermDetailsActivity extends AppCompatActivity {
 
             //Ok to Delete
             database.deleteTerm(termID);
-            Toast.makeText(TermDetailsActivity.this, "Term deleted.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(TermDetailsActivity.this, "Term deleted.",
+                    Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(v.getContext(), TermsActivity.class);
             v.getContext().startActivity(intent);
         } else {
 
             // Better fix that issue
-            Toast.makeText(TermDetailsActivity.this, "Term cannot be deleted while courses are assigned.", Toast.LENGTH_LONG).show();
+            Toast.makeText(TermDetailsActivity.this, "Term cannot be deleted while courses are assigned.",
+                    Toast.LENGTH_LONG).show();
         }
     }
 }

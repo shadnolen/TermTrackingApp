@@ -72,10 +72,13 @@ public class TermsActivity extends AppCompatActivity {
 
         editStart = (TextView) findViewById(R.id.termStart);
         editEnd = (TextView) findViewById(R.id.termEnd);
+
         saveButton = (Button) findViewById(R.id.saveTermButton);
         addButton = (Button) findViewById(R.id.addTermButton);
         cancelButton = (Button) findViewById(R.id.cancelTermButton);
+
         table = (TableLayout) findViewById(R.id.termTable);
+
         termListView = (ScrollView) findViewById(R.id.termListView);
         termEntry = (ScrollView) findViewById(R.id.termEntry);
         termHeader = (EditText) findViewById(R.id.termHeader);
@@ -99,13 +102,13 @@ public class TermsActivity extends AppCompatActivity {
     // Populate
     public void populateTerms(){
 
-        //clear existing view
+        // Clear View
         table.removeAllViews();
 
-        // Check  Database for Existing Term
+        // Existing Term?
         ArrayList<List> allTerms = getTerms();
 
-        //Fill Existing Term
+        // fill term if exist
         for (List<String> list : allTerms){
 
             TableRow row = new TableRow(TermsActivity.this);
@@ -116,7 +119,7 @@ public class TermsActivity extends AppCompatActivity {
             TextView endCol = new TextView(TermsActivity.this);
             Button detailBtn = new Button(TermsActivity.this);
 
-            //convert dates
+            // Convert to Long yo
             long start = Long.valueOf(list.get(2));
             long end = Long.valueOf(list.get(3));
 
@@ -141,7 +144,7 @@ public class TermsActivity extends AppCompatActivity {
                     editor.putString("term", idNum);
                     editor.commit();
 
-                    //Details activity
+                    // Intent
                     Intent intent = new Intent(v.getContext(), TermDetailsActivity.class);
                     v.getContext().startActivity(intent);
                 }
@@ -291,7 +294,7 @@ public class TermsActivity extends AppCompatActivity {
         addButton.setVisibility(View.VISIBLE);
     }
 
-    // Update Datepicker
+    // Update Date Picker
     private void updateLabel(Calendar chosenCalendar){
         String myFormat = "MM/dd/yyyy";
         SimpleDateFormat simpleDate = new SimpleDateFormat(myFormat, Locale.US);
@@ -326,7 +329,7 @@ public class TermsActivity extends AppCompatActivity {
         return termList;
     }
 
-    //create navigation menu
+    // Navigation Menu
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.navmenu, menu);

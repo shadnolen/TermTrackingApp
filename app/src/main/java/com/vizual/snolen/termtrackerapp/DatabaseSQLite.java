@@ -34,24 +34,24 @@ import java.util.List;
 
 public class DatabaseSQLite extends SQLiteOpenHelper {
 
-    //database properties
+    // Properties
     private static final String DATABASE_NAME = "termtrackingapp.db";
     private static final int DATABASE_VERSION = 1;
 
-    //table names
+    // Table Name
     private static final String TABLE_TERMS = "terms";
     private static final String TABLE_COURSES = "courses";
     private static final String TABLE_ASSESSMENTS = "assessments";
     private static final String TABLE_COURSE_NOTES = "courseNotes";
     private static final String TABLE_ASSESSMENT_NOTES = "assessmentNotes";
 
-    //TERMS table column names
+    //  Columns term:
     private static final String TERMS_ID = "id";
     private static final String TERMS_NAME = "name";
     private static final String TERMS_STARTDATE = "startdate";
     private static final String TERMS_ENDDATE = "enddate";
 
-    //COURSES table column names
+    // courses:
     private static final String COURSES_ID = "id";
     private static final String COURSES_TERM_ID = "termId";
     private static final String COURSES_NAME = "name";
@@ -63,7 +63,7 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
     private static final String COURSES_MENTOREMAIL = "mentoremail";
     private static final String COURSES_STATUS = "status";
 
-    //ASSESSMENTS table column names
+    // assessments:
     private static final String ASSESSMENTS_ID = "id";
     private static final String ASSESSMENTS_NAME = "name";
     private static final String ASSESSMENTS_COURSE_ID = "courseId";
@@ -73,20 +73,19 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
     private static final String ASSESSMENTS_DATE = "date";
     private static final String ASSESSMENTS_STATUS = "status";
 
-    //COURSE_NOTES table column names
+    // Notes courses:
     private static final String COURSE_NOTES_ID = "id";
     private static final String COURSE_NOTES_COURSE_ID = "courseId";
     private static final String COURSE_NOTES_TEXT = "text";
     private static final String COURSE_NOTES_CREATED = "created";
 
-    //ASSESSEMENT_NOTES table column names
+    // assessments:
     private static final String ASSESSMENT_NOTES_ID = "id";
     private static final String ASSESSMENT_NOTES_COURSE_ID = "assessmentId";
     private static final String ASSESSMENT_NOTES_TEXT = "text";
     private static final String ASSESSMENT_NOTES_CREATED = "created";
 
-    //Create strings for tables
-
+    //Table Strings
     private static final String TERMS_TABLE_CREATE =
             "CREATE TABLE IF NOT EXISTS " +
                     TABLE_TERMS + " (" +
@@ -155,45 +154,45 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
                     " ON DELETE CASCADE" +
                     ")";
 
-    //constructor
+    // Database constructor:
     public DatabaseSQLite(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    //create method
+    // methods:
     @Override
-    public void onCreate(SQLiteDatabase db){
-        db.execSQL(TERMS_TABLE_CREATE);
-        db.execSQL(COURSES_TABLE_CREATE);
-        db.execSQL(ASSESSMENTS_TABLE_CREATE);
-        db.execSQL(COURSE_NOTES_TABLE_CREATE);
-        db.execSQL(ASSESSMENT_NOTES_TABLE_CREATE);
+    public void onCreate(SQLiteDatabase database){
+        database.execSQL(TERMS_TABLE_CREATE);
+        database.execSQL(COURSES_TABLE_CREATE);
+        database.execSQL(ASSESSMENTS_TABLE_CREATE);
+        database.execSQL(COURSE_NOTES_TABLE_CREATE);
+        database.execSQL(ASSESSMENT_NOTES_TABLE_CREATE);
     }
 
-    //onOpen method to ensure cascade deletion functions
-    public void onOpen(SQLiteDatabase db){
-        db.execSQL("PRAGMA foreign_keys=ON");
+    // Ensure Cascade Deletion
+    public void onOpen(SQLiteDatabase database){
+        database.execSQL("PRAGMA foreign_keys=ON");
     }
 
-    //upgrade method
+    // Upgrade Method if Using Old School
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ASSESSMENT_NOTES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSE_NOTES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ASSESSMENTS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TERMS);
+    public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion){
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_ASSESSMENT_NOTES);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSE_NOTES);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_ASSESSMENTS);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSES);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_TERMS);
     }
 
-    //insert to TERMS
+    // Term insert:
     public boolean insertTermData(String name, long start, long end){
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(TERMS_NAME, name);
         contentValues.put(TERMS_STARTDATE, start);
         contentValues.put(TERMS_ENDDATE, end);
-        long result = db.insert(TABLE_TERMS, null, contentValues);
+        long result = database.insert(TABLE_TERMS, null, contentValues);
 
         if (result == -1)
             return false;
@@ -201,215 +200,218 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
             return true;
     }
 
-    //retrieve all from TERMS
+
+    // retrieve all:
     public Cursor getAllTerms(){
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_TERMS +
+        SQLiteDatabase database = this.getReadableDatabase();
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_TERMS +
                                         " ORDER BY " + TERMS_STARTDATE , null);
-        return res;
+        return cursor;
     }
 
-    //retrieve one term from TERMS by id
+    //retrieve one by id:
     public Cursor getTerm(String termID){
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase database = this.getReadableDatabase();
         String selectQuery = "SELECT * FROM " + TABLE_TERMS +
                                 " WHERE " + TERMS_ID + " = " + termID;
 
-        Cursor res = db.rawQuery(selectQuery, null);
+        Cursor cursor = database.rawQuery(selectQuery, null);
 
-        return res;
+        return cursor;
     }
 
-    //delete row from TERMS
+    //delete row:
     public void deleteTerm(String termID){
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase database = this.getWritableDatabase();
         String selectQuery = "DELETE FROM " + TABLE_TERMS +
                                 " WHERE " + TERMS_ID + " = " + termID;
-        db.execSQL(selectQuery);
+        database.execSQL(selectQuery);
     }
 
-    //get all Term names for spinner and unique check
+    // names for spinner & unique check:
     public List<String> getTermNames(){
 
-        //get names from database
-        Cursor res = getAllTerms();
+        //get names:
+        Cursor cursor = getAllTerms();
 
         //create and populate list
         List<String> termNames = new ArrayList<>();
-        while(res.moveToNext()){
-            termNames.add(res.getString(res.getColumnIndex("name")));
+        while(cursor.moveToNext()){
+            termNames.add(cursor.getString(cursor.getColumnIndex("name")));
         }
-        res.close();
+        cursor.close();
 
-        //return the list
+        //return list:
         return termNames;
     }
 
     public String getTermName(String id){
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_TERMS +
+        SQLiteDatabase database = this.getReadableDatabase();
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_TERMS +
                                         " WHERE " + TERMS_ID + " = '" + id + "'", null);
 
-        res.moveToFirst();
-        String name = res.getString(1);
-        res.close();
+        cursor.moveToFirst();
+        String name = cursor.getString(1);
+        cursor.close();
         return name;
     }
 
-    //return termId from termName
+    // term id from term name:
     public int getTermId(String name){
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_TERMS +
+        SQLiteDatabase database = this.getReadableDatabase();
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_TERMS +
                                         " WHERE " + TERMS_NAME + " = '" + name + "'", null);
 
-        res.moveToFirst();
-        int id = res.getInt(0);
-        res.close();
+        cursor.moveToFirst();
+        int id = cursor.getInt(0);
+        cursor.close();
         return id;
     }
 
-    //check to see if the Terms table is empty
+    //  table empty?
     public boolean isTermsEmpty(){
 
         boolean empty = true;
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_TERMS, null);
-        if (res != null && res.moveToFirst()){
-            empty = (res.getInt(0) == 0);
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery("SELECT COUNT(*) FROM " + TABLE_TERMS, null);
+        if (cursor != null && cursor.moveToFirst()){
+            empty = (cursor.getInt(0) == 0);
         }
 
-        res.close();
+        cursor.close();
 
         return empty;
     }
 
-    //check if a Term has assigned courses
+    // has course?
     public boolean ifTermHasCourses(String termID){
         boolean empty = true;
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase database = this.getReadableDatabase();
         String selectQuery = "SELECT COUNT(*) FROM " + TABLE_COURSES +
                                 " WHERE " + COURSES_TERM_ID + " = " + termID;
 
-        Cursor res = db.rawQuery(selectQuery, null);
+        Cursor cursor = database.rawQuery(selectQuery, null);
 
-        if (res != null && res.moveToFirst()){
-            empty = (res.getInt(0) == 0);
+        if (cursor != null && cursor.moveToFirst()){
+            empty = (cursor.getInt(0) == 0);
         }
 
         return empty;
     }
 
-    //get term start and end dates
+    // start & end:
     public List<Long> getTermDates(String termName){
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase database = this.getReadableDatabase();
         String selectQuery = "SELECT * FROM " + TABLE_TERMS +
                                 " WHERE " + TERMS_NAME + " = '" + termName + "'";
-        Cursor res = db.rawQuery(selectQuery, null);
+        Cursor cursor = database.rawQuery(selectQuery, null);
 
         List<Long> termDates = new ArrayList<>();
-        res.moveToFirst();
-        termDates.add(res.getLong(2));
-        termDates.add(res.getLong(3));
+        cursor.moveToFirst();
+        termDates.add(cursor.getLong(2));
+        termDates.add(cursor.getLong(3));
 
         return termDates;
     }
 
-    //retrieve all from Courses
+    // END TERM //
+
+    // Course get all:
     public Cursor getAllCourses(){
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase database = this.getWritableDatabase();
         String selectQuery = "SELECT * FROM " + TABLE_COURSES;
 
-        Cursor res = db.rawQuery(selectQuery, null);
+        Cursor cursor = database.rawQuery(selectQuery, null);
 
-        return res;
+        return cursor;
     }
 
-    //get all course names
+    // course names:
     public List<String> getCourseNames(){
-        //get names from database
-        Cursor res = getAllCourses();
+        // names from database:
+        Cursor cursor = getAllCourses();
 
-        //create and populate list
+        //create and populate list:
         List<String> courseNames = new ArrayList<>();
-        while(res.moveToNext()){
-            courseNames.add(res.getString(res.getColumnIndex("name")));
+        while(cursor.moveToNext()){
+            courseNames.add(cursor.getString(cursor.getColumnIndex("name")));
         }
-        res.close();
+        cursor.close();
 
-        //return the list
+        //return the list:
         return courseNames;
     }
 
-    //retrieve one course from COURSES by id
+    // one by id:
     public Cursor getCourse(String courseID){
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase database = this.getReadableDatabase();
         String selectQuery = "SELECT * FROM " + TABLE_COURSES +
                 " WHERE " + COURSES_ID + " = " + courseID;
 
-        Cursor res = db.rawQuery(selectQuery, null);
+        Cursor cursor = database.rawQuery(selectQuery, null);
 
-        return res;
+        return cursor;
     }
 
-    //return only the Course name when given course ID
+    // name by id:
     public String getCourseName(String courseID){
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase database = this.getReadableDatabase();
         String selectQuery = "SELECT * FROM " + TABLE_COURSES +
                 " WHERE " + COURSES_ID + " = " + courseID;
 
-        Cursor res = db.rawQuery(selectQuery, null);
-        res.moveToFirst();
-        return res.getString(1);
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        cursor.moveToFirst();
+        return cursor.getString(1);
     }
 
-    //retreive course id from COURSES by name
+    // id from name:
     public int getCourseID(String name){
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase database = this.getReadableDatabase();
         String selectQuery = "SELECT " + COURSES_ID + " FROM " + TABLE_COURSES +
                                 " WHERE " + COURSES_NAME + " = " + name;
-//        Cursor res = db.rawQuery(selectQuery, null);
+
 
         String[] columnsToReturn = {COURSES_ID};
         String selection = COURSES_NAME + " = ?";
         String[] selectionArgs = {name};
-        Cursor res = db.query(TABLE_COURSES, columnsToReturn, selection, selectionArgs, null, null, null);
+        Cursor cursor = database.query(TABLE_COURSES, columnsToReturn, selection, selectionArgs, null, null, null);
 
 
-        res.moveToFirst();
+        cursor.moveToFirst();
 
-        return res.getInt(0);
+        return cursor.getInt(0);
     }
 
-    //retrieve all courses from one term
+    //retrieve all from term:
     public Cursor getCoursesFromTerm(String termID){
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase database = this.getReadableDatabase();
         String selectQuery = "SELECT * FROM " + TABLE_COURSES +
                                 " WHERE " + COURSES_TERM_ID + " = " + termID +
                                 " ORDER BY " + COURSES_STARTDATE;
 
-        Cursor res = db.rawQuery(selectQuery, null);
-        return res;
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        return cursor;
     }
 
     public List<Long> getCourseDates(String courseName){
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase database = this.getReadableDatabase();
         String selectQuery = "SELECT " + COURSES_STARTDATE + ", " + COURSES_ENDDATE + " FROM " + TABLE_COURSES +
                 " WHERE " + COURSES_NAME + " = '" + courseName + "'";
-        Cursor res = db.rawQuery(selectQuery, null);
+        Cursor cursor = database.rawQuery(selectQuery, null);
 
         List<Long> courseDates = new ArrayList<>();
-        res.moveToFirst();
-        courseDates.add(res.getLong(0));
-        courseDates.add(res.getLong(1));
+        cursor.moveToFirst();
+        courseDates.add(cursor.getLong(0));
+        courseDates.add(cursor.getLong(1));
 
         return courseDates;
     }
 
-    //insert into Courses
+    // insert:
     public boolean insertCourseData(String name, String term, String description, long start, long end,
                                     String status, String menName, String menPhone, String menMail){
 
-        //get termId, if term entered; otherwise, put a zero
+        // get term id otherwisen  put a zero
         int termId;
 
         if (term == "none"){
@@ -418,8 +420,8 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
             termId = getTermId(term);
         }
 
-        //get database and ContentValues container
-        SQLiteDatabase db = this.getWritableDatabase();
+        // Content Values
+        SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(COURSES_NAME, name);
@@ -431,7 +433,7 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
         contentValues.put(COURSES_MENTORPHONE, menPhone);
         contentValues.put(COURSES_MENTOREMAIL, menMail);
         contentValues.put(COURSES_STATUS, status);
-        long result = db.insert(TABLE_COURSES, null, contentValues);
+        long result = database.insert(TABLE_COURSES, null, contentValues);
 
         if (result == -1)
             return false;
@@ -439,18 +441,18 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
             return true;
     }
 
-    //delete course
+    //delete:
     public void deleteCourse(String courseID){
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase database = this.getWritableDatabase();
         String query = "DELETE FROM " + TABLE_COURSES + " WHERE " + COURSES_ID + " = " + courseID;
-        db.execSQL(query);
+        database.execSQL(query);
     }
 
-    //update course
+    //update:
     public boolean updateCourse(String courseID, String name, int term, String description,
                              long numStart, long numEnd, String status, String menName,
                              String menPhone, String menMail){
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COURSES_NAME, name);
         contentValues.put(COURSES_TERM_ID, term);
@@ -464,7 +466,7 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
         String where = COURSES_ID + "=?";
         String[] whereArgs = new String[] {String.valueOf(courseID)};
 
-        long result = db.update(TABLE_COURSES, contentValues, where, whereArgs);
+        long result = database.update(TABLE_COURSES, contentValues, where, whereArgs);
 
         if (result == -1)
             return false;
@@ -472,66 +474,66 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
             return true;
     }
 
-    //check if courses table if empty
+    // empty?
     public boolean isCoursesEmpty(){
         boolean empty = true;
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_COURSES, null);
-        if (res != null && res.moveToFirst()){
-            empty = (res.getInt(0) == 0);
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery("SELECT COUNT(*) FROM " + TABLE_COURSES, null);
+        if (cursor != null && cursor.moveToFirst()){
+            empty = (cursor.getInt(0) == 0);
         }
 
-        res.close();
+        cursor.close();
 
         return empty;
     }
+       // END COURSES //
 
-    //retrieve all assessments
+    // DRY METHOD INVOKED FOR ASSESSMENTS COMMENTS  ITS THE SAME AS ABOVE
     public Cursor getAllAssessments(){
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase database = this.getReadableDatabase();
         String selectQuery = "SELECT * FROM " + TABLE_ASSESSMENTS +
                                 " GROUP BY " + ASSESSMENTS_COURSE_ID +
                                 " ORDER BY " + ASSESSMENTS_DATE;
 
-        return db.rawQuery(selectQuery, null);
+        return database.rawQuery(selectQuery, null);
     }
 
-    //retrieve assessments for single course
+
     public Cursor getAssessmentsForOneCourse(String courseID){
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase database = this.getReadableDatabase();
         String selectQuery = "SELECT * FROM " + TABLE_ASSESSMENTS +
                                 " WHERE " + ASSESSMENTS_COURSE_ID + " = " + courseID;
 
-        return db.rawQuery(selectQuery, null);
+        return database.rawQuery(selectQuery, null);
     }
 
-    //get all assessment names
+
     public List<String> getAssessmentNames(){
-        //get names from database
-        Cursor res = getAllAssessments();
 
-        //create and populate list
+        Cursor cursor = getAllAssessments();
+
+
         List<String> assessmentNames = new ArrayList<>();
-        while(res.moveToNext()){
-            assessmentNames.add(res.getString(res.getColumnIndex("name")));
+        while(cursor.moveToNext()){
+            assessmentNames.add(cursor.getString(cursor.getColumnIndex("name")));
         }
-        res.close();
+        cursor.close();
 
-        //return the list
         return assessmentNames;
     }
 
-    //retreive assessment
+    // DRY METHOD INVOKED FOR ASSESSMENTS COMMENTS  ITS THE SAME AS ABOVE
     public Cursor getAssessmentData(String assessmentID){
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase database = this.getReadableDatabase();
         String selectQuery = "SELECT * FROM " + TABLE_ASSESSMENTS + " WHERE " + ASSESSMENTS_ID + " = " + assessmentID;
-        return db.rawQuery(selectQuery, null);
+        return database.rawQuery(selectQuery, null);
     }
 
-    //insert new Assessment into ASSESSMENTS
+    // DRY METHOD INVOKED FOR ASSESSMENTS COMMENTS  ITS THE SAME AS ABOVE
     public boolean insertAssessment(String name, String code, String description, int course, String type,
                             String status, long dateDUE){
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(ASSESSMENTS_NAME, name);
@@ -542,15 +544,15 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
         contentValues.put(ASSESSMENTS_DATE, dateDUE);
         contentValues.put(ASSESSMENTS_STATUS, status);
 
-        long result = db.insert(TABLE_ASSESSMENTS, null, contentValues);
+        long result = database.insert(TABLE_ASSESSMENTS, null, contentValues);
 
         return result != -1;
     }
 
-    //update Assessment entry
+    // DRY METHOD INVOKED FOR ASSESSMENTS COMMENTS  ITS THE SAME AS ABOVE
     public boolean updateAssessment(String id, String name, String code, String description, int course, String type,
                                  String status, long dateDUE){
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(ASSESSMENTS_NAME, name);
@@ -564,15 +566,15 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
         String where = ASSESSMENTS_ID + "=?";
         String[] whereArgs = new String[] {String.valueOf(id)};
 
-        long result = db.update(TABLE_ASSESSMENTS, contentValues, where, whereArgs);
+        long result = database.update(TABLE_ASSESSMENTS, contentValues, where, whereArgs);
 
         return result != -1;
 
     }
 
-    //method to ensure selected date does not fall inside start dates of other terms or courses
+    // DRY METHOD INVOKED FOR ASSESSMENTS COMMENTS  ITS THE SAME AS ABOVE
     public boolean dateCompares(String table, long start, long end){
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase database = this.getReadableDatabase();
         boolean overlap = false;
         String tableStart, tableEnd;
         int resStartCount, resEndCount;
@@ -594,84 +596,85 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + table + " WHERE " +
                                 tableStart + " BETWEEN " + start + " AND " + end;
 
-        Cursor res = db.rawQuery(selectQuery, null);
+        Cursor cursor = database.rawQuery(selectQuery, null);
 
-        //trigger the overlap flag, unless the date is equal
-        if (res.getCount() != 0){
-            res.moveToFirst();
-            if (start != res.getLong(resStartCount)) {
+        // Overlap Flag
+        if (cursor.getCount() != 0){
+            cursor.moveToFirst();
+            if (start != cursor.getLong(resStartCount)) {
                 overlap = true;
             }
         }
-        res.close();
+        cursor.close();
 
-        //same as above, but with end date
+        // DRY METHOD INVOKED FOR ASSESSMENTS COMMENTS  ITS THE SAME AS ABOVE
         if (!overlap){
             selectQuery = "SELECT * FROM " + table + " WHERE " +
                     tableEnd + " BETWEEN " + start + " AND " + end;
 
-            res = db.rawQuery(selectQuery, null);
+            cursor = database.rawQuery(selectQuery, null);
 
-            if (res.getCount() != 0){
-                res.moveToFirst();
-                if (end != res.getLong(resEndCount)) {
+            if (cursor.getCount() != 0){
+                cursor.moveToFirst();
+                if (end != cursor.getLong(resEndCount)) {
                     overlap = true;
                 }
             }
         }
-        res.close();
+        cursor.close();
 
         return overlap;
     }
+   // END ASSESSMENTS
 
-    //create new Course note
+    // Create New Note
     public boolean insertCourseNote(String courseID, String noteText){
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(COURSE_NOTES_COURSE_ID, courseID);
         contentValues.put(COURSE_NOTES_TEXT, noteText);
 
-        long result = db.insert(TABLE_COURSE_NOTES, null, contentValues);
-        db.close();
+        long result = database.insert(TABLE_COURSE_NOTES, null, contentValues);
+        database.close();
 
         return result != -1;
     }
 
-    //delete course note
+    // Delete That Note
     public void deleteCourseNote(String noteID){
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase database = this.getWritableDatabase();
         String selectQuery = "DELETE FROM " + TABLE_COURSE_NOTES + " WHERE " + COURSE_NOTES_ID + " = " + noteID;
-        db.execSQL(selectQuery);
+        database.execSQL(selectQuery);
     }
 
     public Cursor getCourseNotes(String courseID){
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase database = this.getReadableDatabase();
         String selectQuery = "SELECT * FROM " + TABLE_COURSE_NOTES +
                                 " WHERE " + COURSE_NOTES_COURSE_ID + " = " + courseID;
 
-        return db.rawQuery(selectQuery, null);
+        return database.rawQuery(selectQuery, null);
     }
-
+   // DRY ASSESSMENT
     public boolean insertAssessmentNote(String assessmentID, String noteText){
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(COURSE_NOTES_COURSE_ID, assessmentID);
         contentValues.put(COURSE_NOTES_TEXT, noteText);
 
-        long result = db.insert(TABLE_ASSESSMENT_NOTES, null, contentValues);
+        long result = database.insert(TABLE_ASSESSMENT_NOTES, null, contentValues);
 
         return result != -1;
     }
 
-
+     // FIA AND Delete..........;)
     public void deleteEverything(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_COURSES);
-        db.execSQL("vacuum");
-        db.execSQL("DELETE FROM " + TABLE_TERMS);
-        db.execSQL("vacuum");
+        SQLiteDatabase database = this.getWritableDatabase();
+        database.execSQL("DELETE FROM " + TABLE_COURSES);
+        database.execSQL("vacuum");
+        database.execSQL("DELETE FROM " + TABLE_TERMS);
+        database.execSQL("vacuum");
     }
 }
 

@@ -16,7 +16,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     Button termsButton, coursesButton, assessButton;
-    DatabaseSQLite db;
+    DatabaseSQLite database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Context context = getApplicationContext();
-                db = new DatabaseSQLite(context);
+                database = new DatabaseSQLite(context);
                 Intent intent = new Intent(v.getContext(), TermsActivity.class);
                 v.getContext().startActivity(intent);
             }
@@ -44,10 +44,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Context context = getApplicationContext();
-                db = new DatabaseSQLite(context);
+                database = new DatabaseSQLite(context);
 
                 //Term exist?
-                if (db.isTermsEmpty()) {
+                if (database.isTermsEmpty()) {
                     Toast.makeText(MainActivity.this, "Add Terms before adding Courses.", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent intent = new Intent(v.getContext(), CoursesActivity.class);
@@ -61,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Context context = getApplicationContext();
-                db = new DatabaseSQLite(context);
-                if (db.isCoursesEmpty()) {
+                database = new DatabaseSQLite(context);
+                if (database.isCoursesEmpty()) {
                     Toast.makeText(MainActivity.this, "Add Courses, before adding Assessments.", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent intent = new Intent(v.getContext(), AssessmentsActivity.class);
@@ -73,14 +73,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //navigation menu
+    // Navigation menu
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.navmenu, menu);
         return true;
     }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
+     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.termscreen:
                 startActivity(new Intent(this, TermsActivity.class));

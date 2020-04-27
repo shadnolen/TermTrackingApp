@@ -82,76 +82,66 @@ public class CoursesActivity extends AppCompatActivity {
         // Database Connection
         database = new DatabaseSQLite(this);
 
-        //castingon
+        // Cast
         courseTable = (TableLayout) findViewById(R.id.courseTable);
+
         listView = (ScrollView) findViewById(R.id.courseListTable);
         entryView = (ScrollView) findViewById(R.id.courseEntryView);
+
         enterName = (EditText) findViewById(R.id.editCourseName);
         enterDescription = (EditText) findViewById(R.id.courseDescription);
+
         editStart = (TextView) findViewById(R.id.editStart);
         editEnd = (TextView) findViewById(R.id.editEnd);
+
         mentorName = (EditText) findViewById(R.id.editMentorName);
         mentorMail = (EditText) findViewById(R.id.editMentorEmail);
         mentorPhone = (EditText) findViewById(R.id.editMentorPhone);
+
         addCourse = (Button) findViewById(R.id.addCourseButton);
         saveCourse = (Button) findViewById(R.id.saveButton);
         cancelCourse = (Button) findViewById(R.id.cancelButton);
+
         termSpinner = (Spinner) findViewById(R.id.termSpinner);
         statusSpinner = (Spinner) findViewById(R.id.statusSpinner);
 
         sharedPrefer = PreferenceManager.getDefaultSharedPreferences(this);
         editor = sharedPrefer.edit();
 
-        //DatePickers
-//        editStart.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dateFieldToggle = 1;
-//                new DatePickerDialog(CoursesActivity.this, datePick, calendar.get(Calendar.YEAR),
-//                        calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
-//            }
-//        });
-//        editEnd.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dateFieldToggle = 2;
-//                new DatePickerDialog(CoursesActivity.this, datePick, calendar.get(Calendar.YEAR),
-//                        calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
-//            }
-//        });
-
-
-        //fill in the table with Courses
+        // Populate
         populateCourses();
     }
 
-    //retrieve Courses from database and list table
+    // Database Retrieval
     public void populateCourses(){
 
-        //clear existing view
+        // Clear View
         courseTable.removeAllViews();
 
-        //get data from database
+        // Database Data (ARRAYLIST)
         ArrayList<List> allCourses = getCourses();
 
         if(!allCourses.isEmpty()) {
             for (List<String> list : allCourses) {
-
                 TableRow row = new TableRow(CoursesActivity.this);
+
                 TextView columnID = new TextView(CoursesActivity.this);
                 TextView columnName = new TextView(CoursesActivity.this);
                 TextView statusCol = new TextView(CoursesActivity.this);
+
                 Button detailBtn = new Button(CoursesActivity.this);
 
                 columnID.setText(list.get(0));
-                columnID.setMinWidth(120);
+                columnID.setMinWidth(130);
                 final String idNum = columnID.getText().toString();
+
                 columnName.setText(list.get(1));
                 columnName.setMinWidth(250);
                 columnName.setMaxEms(10);
                 columnName.setEllipsize(TextUtils.TruncateAt.END);
                 columnName.setHorizontallyScrolling(false);
                 columnName.setSingleLine();
+
                 statusCol.setText(list.get(2));
                 statusCol.setMinWidth(250);
 
@@ -159,11 +149,12 @@ public class CoursesActivity extends AppCompatActivity {
                 detailBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //put course data into Shared Preferences to send to next activity
+
+                        // I. Next Activity Pass Though
                         editor.putString("course", idNum);
                         editor.commit();
 
-                        //switch to Details activity
+                        // II. To Details Activity
                         Intent intent = new Intent(v.getContext(), CourseDetailActivity.class);
                         v.getContext().startActivity(intent);
                     }
@@ -173,6 +164,7 @@ public class CoursesActivity extends AppCompatActivity {
                 row.addView(columnName);
                 row.addView(statusCol);
                 row.addView(detailBtn);
+
                 courseTable.addView(row);
             }
         }
@@ -180,7 +172,8 @@ public class CoursesActivity extends AppCompatActivity {
 
     //onClick methods for date fields
     public void startDateSelect_CA(View v){
-        DatePickerDialog datepicker = new DatePickerDialog(CoursesActivity.this, datePick, calendar.get(Calendar.YEAR),
+        DatePickerDialog datepicker = new DatePickerDialog(CoursesActivity.this, datePick,
+                calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 
         List<Long> termDates = database.getTermDates(termSpinner.getSelectedItem().toString());
@@ -192,8 +185,10 @@ public class CoursesActivity extends AppCompatActivity {
     }
 
     public void endDateSelect_CA(View v){
-        DatePickerDialog datepicker = new DatePickerDialog(CoursesActivity.this, datePick, calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        DatePickerDialog datepicker = new DatePickerDialog(CoursesActivity.this, datePick,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH));
 
         List<Long> termDates = database.getTermDates(termSpinner.getSelectedItem().toString());
         dateFieldToggle = 2;
@@ -203,21 +198,20 @@ public class CoursesActivity extends AppCompatActivity {
         datepicker.show();
     }
 
-    //onClick methods for buttons
+
     public void addCourse(View v){
 
-        //switch layout visibility
+        //Layout Visibility
         listView.setVisibility(View.GONE);
         addCourse.setVisibility(View.GONE);
         entryView.setVisibility(View.VISIBLE);
 
-        //fill in spinners
-        //status spinner
+     // Spinner status:
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.course_status, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         statusSpinner.setAdapter(adapter);
 
-        //terms spinner
+        // terms:
         List<String> termSpinnerList = database.getTermNames();
         ArrayAdapter<String> termAdapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, termSpinnerList);
@@ -227,26 +221,31 @@ public class CoursesActivity extends AppCompatActivity {
 
     public void saveCourse(View v){
         boolean dataInvalid = false;
+
         String courseName = enterName.getText().toString();
         String description = enterDescription.getText().toString();
+
         String start = editStart.getText().toString();
         String end = editEnd.getText().toString();
+
         long numStart = 1;
         long numEnd = 1;
+
         String status = statusSpinner.getSelectedItem().toString();
         String term = termSpinner.getSelectedItem().toString();
+
         String menName = mentorName.getText().toString();
         String menPhone = mentorPhone.getText().toString();
         String menMail = mentorMail.getText().toString();
 
-        //DATA VALIDATION METHODS
-        //check for blank course name
+
+        // Validation Blank Course:
         if (courseName.isEmpty()){
             Toast.makeText(CoursesActivity.this, "Enter name.", Toast.LENGTH_SHORT).show();
             dataInvalid = true;
         }
 
-        //verify name is unique
+        // unique name:
         if (!dataInvalid){
             List<String> courseNames = database.getCourseNames();
             int temp = courseNames.contains(courseName) ? 1 : 2;
@@ -256,12 +255,14 @@ public class CoursesActivity extends AppCompatActivity {
             }
         }
 
-        //convert dates to long
+        // Date to Long
         if (!dataInvalid) {
-            //check that dates are not empty
+
+            // Empty?
             if (start.isEmpty() || end.isEmpty()) {
                 dataInvalid = true;
-                Toast.makeText(CoursesActivity.this, "Dates cannot be blank.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CoursesActivity.this, "Dates cannot be blank.",
+                        Toast.LENGTH_SHORT).show();
             } else {
                 try {
                     SimpleDateFormat simpleDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
@@ -271,32 +272,36 @@ public class CoursesActivity extends AppCompatActivity {
                     numEnd = date.getTime();
                 } catch (ParseException e) {
                     dataInvalid = true;
-                    Toast.makeText(CoursesActivity.this, "There was a problem with your dates.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CoursesActivity.this, "There was a problem with your dates.",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         }
 
-        //ensure that the end date is before start date
+        // End Date Before Start?
         if (!dataInvalid){
             boolean datesvalid = (numEnd > numStart);
             if (!datesvalid){
-                Toast.makeText(CoursesActivity.this, "End date must be after start date.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CoursesActivity.this, "End date must be after start date.",
+                        Toast.LENGTH_SHORT).show();
                 dataInvalid = true;
             }
         }
 
-        //ensure that the dates are within the selected term
+        //  Between Term Start & End
         if (!dataInvalid){
                 List<Long> termDates = database.getTermDates(term);
                 boolean datesvalid = (numStart >= termDates.get(0));
 
                 if (!datesvalid){
-                    Toast.makeText(CoursesActivity.this, "Start date outside of term.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CoursesActivity.this, "Start date outside of term.",
+                            Toast.LENGTH_SHORT).show();
                     dataInvalid = true;
                 } else {
                     datesvalid = (numEnd <= termDates.get(1));
                     if (!datesvalid){
-                        Toast.makeText(CoursesActivity.this, "End date outside of term.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CoursesActivity.this, "End date outside of term.",
+                                Toast.LENGTH_SHORT).show();
                         dataInvalid = true;
                     }
                 }
@@ -306,28 +311,31 @@ public class CoursesActivity extends AppCompatActivity {
         if (!dataInvalid){
             boolean overlap = database.dateCompares("courses", numStart, numEnd);
             if (overlap){
-                Toast.makeText(CoursesActivity.this, "Course dates overlap with another course.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CoursesActivity.this, "Course dates overlap with another course.",
+                        Toast.LENGTH_SHORT).show();
                 dataInvalid = true;
             }
         }
 
-        //enter data into database
+        // Save to Database
         if (!dataInvalid){
             boolean isInserted = database.insertCourseData(courseName, term, description, numStart, numEnd,
                                     status, menName, menPhone, menMail);
 
             if (isInserted){
-                Toast.makeText(CoursesActivity.this, "Course added.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CoursesActivity.this, "Course added.",
+                        Toast.LENGTH_SHORT).show();
 
-                //switch views
+
                 entryView.setVisibility(View.GONE);
                 listView.setVisibility(View.VISIBLE);
                 addCourse.setVisibility(View.VISIBLE);
 
-                //repopulate the table
+                // Repopulate
                 populateCourses();
             } else {
-                Toast.makeText(CoursesActivity.this, "Course not added.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CoursesActivity.this, "Course not added.",
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -357,7 +365,7 @@ public class CoursesActivity extends AppCompatActivity {
         return courseList;
     }
 
-    //DatePicker update method
+    // DatePicker
     private void updateLabel(){
         String myFormat = "MM/dd/yyyy";
         SimpleDateFormat simpleDate = new SimpleDateFormat(myFormat, Locale.US);
@@ -371,7 +379,7 @@ public class CoursesActivity extends AppCompatActivity {
             editEnd.setText(newDate);
     }
 
-    //create navigation menu
+    // Navigation Menu
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.navmenu, menu);
